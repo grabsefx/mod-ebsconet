@@ -1,0 +1,18 @@
+{
+  "id": "${artifactId}-${version}",
+  "name": "Ebsconet integration business logic module",
+  "provides": [
+    {
+      "id": "ebsconet",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/ebsconet/order-lines/{polNumber}",
+          "permissionsRequired": ["ebsconet.order-lines.get"],
+          "modulePermissions": ["ebsconet.order-lines.get"]
+        }
+      ]
+    }
+  ]
+}
