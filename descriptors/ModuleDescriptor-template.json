@@ -1,6 +1,9 @@
 {
   "id": "${artifactId}-${version}",
   "name": "Ebsconet integration business logic module",
+  "requires": [
+
+  ],
   "provides": [
     {
       "id": "ebsconet",
@@ -14,5 +17,35 @@
         }
       ]
     }
-  ]
+  ],
+  "permissionSets": [
+    {
+      "permissionName": "ebsconet.all",
+      "displayName": "Ebsconet API module - all permissions",
+      "description": "All permissions for ebsconet module",
+      "subPermissions": [
+        "ebsconet.order-lines.get"
+      ]
+    },
+    {
+      "permissionName": "ebsconet.order-lines.get",
+      "displayName": "get order lines, related to the product order line number",
+      "description": "Get list of order lines"
+    }
+  ],
+  "launchDescriptor": {
+    "dockerImage": "${artifactId}:${version}",
+    "dockerPull": false,
+    "dockerArgs": {
+      "HostConfig": {
+        "Memory": 357913941,
+        "PortBindings": { "8081/tcp": [ { "HostPort": "%p" } ] }
+      }
+    },
+    "env": [
+      { "name": "JAVA_OPTIONS",
+        "value": "-XX:MaxRAMPercentage=50.0"
+      }
+    ]
+  }
 }
