@@ -1,5 +1,5 @@
 {
-  "id": "${artifactId}-${version}",
+  "id": "@artifactId@-@version@",
   "name": "Ebsconet integration business logic module",
   "requires": [
 
@@ -34,7 +34,7 @@
     }
   ],
   "launchDescriptor": {
-    "dockerImage": "${artifactId}:${version}",
+    "dockerImage": "@artifactId@:@version@",
     "dockerPull": false,
     "dockerArgs": {
       "HostConfig": {

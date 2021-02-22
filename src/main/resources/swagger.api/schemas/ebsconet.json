@@ -1,0 +1,93 @@
+{
+  "id": "ebsconet",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Ebsconet integration schema",
+  "type": "object",
+  "properties": {
+    "apiKey": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": true,
+      "default": ""
+    },
+    "vendor": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "maxLength": 55,
+      "readonly": true
+    },
+    "cancellationRestriction": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "CancellationRestrictionNote": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "unitPrice": {
+      "type": "number",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "currency": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "vendorReferenceNumber": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "poNumber": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "poLineNumber": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+    "readonly": true
+    },
+    "subscriptionToDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "subscriptionFromDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "quantity": {
+      "type": "integer",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "fundCode": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "publisherName": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "vendorAccountNumber": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": false
+    },
+    "workflowStatus": {
+      "type": "string",
+      "description": "ADD ITEM DESCRIPTION",
+      "readonly": true
+    }
+  },
+  "default": {}
+}
