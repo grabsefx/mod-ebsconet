@@ -101,6 +101,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>1.5.2</version>
+    </dependency>
+
     <!--  Test libraries dependencies -->
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
@@ -226,39 +232,40 @@
         </executions>
       </plugin>
 
-      <!--      <plugin>-->
-      <!--        <groupId>org.openapitools</groupId>-->
-      <!--        <artifactId>openapi-generator-maven-plugin</artifactId>-->
-      <!--        <version>${openapi-generator.version}</version>-->
-      <!--        <executions>-->
-      <!--          <execution>-->
-      <!--            <id>ebsconet</id>-->
-      <!--            <goals>-->
-      <!--              <goal>generate</goal>-->
-      <!--            </goals>-->
-      <!--            <configuration>-->
-      <!--              <inputSpec>${ebsconet.yaml.file}</inputSpec>-->
-      <!--              <output>${project.build.directory}/generated-sources</output>-->
-      <!--              <generatorName>spring</generatorName>-->
-      <!--              <modelPackage>${project.groupId}.rs.domain.dto</modelPackage>-->
-      <!--              <apiPackage>${project.groupId}.rs.rest.resource</apiPackage>-->
-      <!--              <generateApis>true</generateApis>-->
-      <!--              <generateApiTests>true</generateApiTests>-->
-      <!--              <generateApiDocumentation>true</generateApiDocumentation>-->
-      <!--              <generateModels>true</generateModels>-->
-      <!--              <generateModelTests>false</generateModelTests>-->
-      <!--              <generateSupportingFiles>true</generateSupportingFiles>-->
-      <!--              <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>-->
-      <!--              <generateModelDocumentation>true</generateModelDocumentation>-->
-      <!--              <configOptions>-->
-      <!--                <java8>true</java8>-->
-      <!--                <dateLibrary>java</dateLibrary>-->
-      <!--                <interfaceOnly>true</interfaceOnly>-->
-      <!--              </configOptions>-->
-      <!--            </configuration>-->
-      <!--          </execution>-->
-      <!--        </executions>-->
-      <!--      </plugin>-->
+      <!-- openapi-generator-maven-plugin -->
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator.version}</version>
+        <executions>
+          <execution>
+            <id>ebsconet</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${ebsconet.yaml.file}</inputSpec>
+              <output>${project.build.directory}/generated-sources</output>
+              <generatorName>spring</generatorName>
+              <modelPackage>${project.groupId}.mod_ebsconet.domain.dto</modelPackage>
+              <apiPackage>${project.groupId}.mod_ebsconet.rest.resource</apiPackage>
+              <generateApis>true</generateApis>
+              <generateApiTests>true</generateApiTests>
+              <generateApiDocumentation>true</generateApiDocumentation>
+              <generateModels>true</generateModels>
+              <generateModelTests>false</generateModelTests>
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+              <generateModelDocumentation>true</generateModelDocumentation>
+              <configOptions>
+                <java8>true</java8>
+                <dateLibrary>java</dateLibrary>
+                <interfaceOnly>true</interfaceOnly>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
