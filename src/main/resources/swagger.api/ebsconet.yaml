@@ -38,7 +38,6 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/poLineNumber"
-  /order-lines/{id}:
     put:
       summary: Save single Ebsconet product order line
       responses:
@@ -51,11 +50,12 @@ paths:
                 example: OK
       operationId: putPoLine
       parameters:
-        - name: id
+        - name: poLineNumber
           in: path
+          description: product order line number
           required: true
           schema:
-            type: integer
+            $ref: "#/components/schemas/poLineNumber"
 components:
   schemas:
     poLine:
