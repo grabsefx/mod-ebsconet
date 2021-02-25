@@ -1,15 +1,9 @@
 {
-  "id": "ebsconet",
+  "id": "ebsconet_order_line",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "description": "Ebsconet integration schema",
+  "description": "Ebsconet order line integration schema",
   "type": "object",
   "properties": {
-    "apiKey": {
-      "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
-      "readonly": true,
-      "default": ""
-    },
     "vendor": {
       "type": "string",
       "description": "ADD ITEM DESCRIPTION",
@@ -17,13 +11,13 @@
       "readonly": true
     },
     "cancellationRestriction": {
-      "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "type": "boolean",
+      "description": "Whether or not there are cancellation restrictions for this purchase order line",
       "readonly": false
     },
-    "CancellationRestrictionNote": {
+    "cancellationRestrictionNote": {
       "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "description": "Free-form notes related to cancellation restrictions",
       "readonly": false
     },
     "unitPrice": {
@@ -33,7 +27,7 @@
     },
     "currency": {
       "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "description": "An ISO currency code",
       "readonly": false
     },
     "vendorReferenceNumber": {
@@ -47,9 +41,8 @@
       "readonly": false
     },
     "poLineNumber": {
-      "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
-    "readonly": true
+      "$ref": "order_line_number.json",
+      "readonly": true
     },
     "subscriptionToDate": {
       "type": "string",
@@ -70,17 +63,17 @@
     },
     "fundCode": {
       "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "description": "Fund distribution code",
       "readonly": false
     },
     "publisherName": {
       "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "description": "Publisher of the material",
       "readonly": false
     },
     "vendorAccountNumber": {
       "type": "string",
-      "description": "ADD ITEM DESCRIPTION",
+      "description": "Account number on the vendor's end associated with this purchase order line",
       "readonly": false
     },
     "workflowStatus": {
@@ -89,5 +82,8 @@
       "readonly": true
     }
   },
-  "default": {}
+  "required": [
+    "currency",
+    "poLineNumber"
+  ]
 }

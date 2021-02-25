@@ -1,0 +1,7 @@
+{
+  "id": "po_line_number",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A human readable number, assigned to this product order line",
+  "type": "string",
+  "pattern": "^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$"
+}

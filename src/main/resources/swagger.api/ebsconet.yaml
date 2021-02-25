@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  title: Ebsconet integration API
+  description: "Ebsconet integration API"
+  version: 0.0.1
+servers:
+  - url: /ebsconet/
+paths:
+  /order-lines/{poLineNumber}:
+    get:
+      summary: Get single Ebsconet product order line
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/poLine"
+        '404':
+          description: Product order line not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Product order line not found
+        '500':
+          description: Internal server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Internal server error
+      operationId: getPoLine
+      parameters:
+        - name: poLineNumber
+          in: path
+          description: product order line number
+          required: true
+          schema:
+            $ref: "#/components/schemas/poLineNumber"
+  /order-lines/{id}:
+    put:
+      summary: Save single Ebsconet product order line
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+      operationId: putPoLine
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+components:
+  schemas:
+    poLine:
+      $ref: schemas/ebsconet_order_line.json
+    poLineNumber:
+      $ref: schemas/order_line_number.json
