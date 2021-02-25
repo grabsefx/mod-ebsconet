@@ -42,6 +42,7 @@
     },
     "poLineNumber": {
       "$ref": "order_line_number.json",
+      "description": "A human readable number assigned to this PO line",
       "readonly": true
     },
     "subscriptionToDate": {
