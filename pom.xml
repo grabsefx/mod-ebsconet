@@ -264,6 +264,16 @@
               </configOptions>
             </configuration>
           </execution>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/swagger.api/ebsconet.yaml</inputSpec>
+              <output>${project.build.directory}/docs/mod-ebsconet</output>
+              <generatorName>html2</generatorName>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
 

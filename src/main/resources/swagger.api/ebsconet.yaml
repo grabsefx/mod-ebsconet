@@ -6,7 +6,7 @@ info:
 servers:
   - url: /ebsconet/
 paths:
-  /order-lines/{poLineNumber}:
+  /orders/order-lines/{poLineNumber}:
     get:
       summary: Get single Ebsconet product order line
       responses:
