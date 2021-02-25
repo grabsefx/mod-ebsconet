@@ -38,7 +38,6 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/poLineNumber"
-  /order-lines/{id}:
     put:
       summary: Save single Ebsconet product order line
       responses:
