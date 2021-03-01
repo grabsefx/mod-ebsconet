@@ -3,6 +3,7 @@ spring:
     name: mod-ebsconet
   liquibase:
     enabled: false
+    change-log: classpath:/db/changelog/changelog-master.xml
   autoconfigure:
     exclude:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
