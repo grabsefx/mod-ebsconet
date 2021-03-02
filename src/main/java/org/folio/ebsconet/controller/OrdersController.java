@@ -1,14 +1,34 @@
 package org.folio.ebsconet.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+
+import org.folio.ebsconet.domain.dto.PoLine;
 import org.folio.ebsconet.rest.resource.OrdersApi;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Log4j2
+import io.swagger.annotations.ApiParam;
+
 @RestController
-@RequiredArgsConstructor
-@RequestMapping(value = "/orders/order-lines")
-public class OrdersController implements OrdersApi {
+@RequestMapping(value = "/ebsconet")
+public class OrdersController  implements OrdersApi {
+
+  @Override
+  public ResponseEntity<PoLine> getPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber) {
+    PoLine poLine = new PoLine();
+    poLine.setPoLineNumber(poLineNumber);
+
+    return new ResponseEntity<>(poLine, HttpStatus.OK);
+  }
+
+  @Override
+  public ResponseEntity<Void> putPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber, @ApiParam(value = "" ,required=true )  @Valid @RequestBody PoLine poLine) {
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
 }
