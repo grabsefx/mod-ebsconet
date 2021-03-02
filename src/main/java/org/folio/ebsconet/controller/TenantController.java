@@ -1,4 +1,4 @@
-package org.folio.mod_ebsconet.controller;
+package org.folio.ebsconet.controller;
 
 import org.folio.tenant.rest.resource.TenantApi;
 import org.springframework.web.bind.annotation.RequestMapping;

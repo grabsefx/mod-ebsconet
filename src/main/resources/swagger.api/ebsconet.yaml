@@ -16,6 +16,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/poLine"
+        '400':
+          description: Bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Bad request
         '404':
           description: Product order line not found
           content:
@@ -48,6 +55,20 @@ paths:
               schema:
                 type: string
                 example: OK
+        '400':
+          description: Bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Bad request
+        '500':
+          description: Internal server error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Internal server error
       operationId: putPoLine
       parameters:
         - name: poLineNumber

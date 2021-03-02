@@ -15,3 +15,9 @@ feign:
     config:
       change-manager:
         logger-level: full
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,env,httptrace

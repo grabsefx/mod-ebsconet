@@ -1,4 +1,4 @@
-package org.folio.mod_ebsconet.config;
+package org.folio.ebsconet.config;
 
 import org.springframework.context.annotation.Configuration;
 
