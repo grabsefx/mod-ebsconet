@@ -1,4 +1,4 @@
-package org.folio.mod_ebsconet;
+package org.folio.ebsconet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

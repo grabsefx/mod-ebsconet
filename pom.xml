@@ -232,7 +232,6 @@
         </executions>
       </plugin>
 
-      <!-- openapi-generator-maven-plugin -->
       <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -247,8 +246,8 @@
               <inputSpec>${ebsconet.yaml.file}</inputSpec>
               <output>${project.build.directory}/generated-sources</output>
               <generatorName>spring</generatorName>
-              <modelPackage>${project.groupId}.mod_ebsconet.domain.dto</modelPackage>
-              <apiPackage>${project.groupId}.mod_ebsconet.rest.resource</apiPackage>
+              <modelPackage>${project.groupId}.ebsconet.domain.dto</modelPackage>
+              <apiPackage>${project.groupId}.ebsconet.rest.resource</apiPackage>
               <generateApis>true</generateApis>
               <generateApiTests>true</generateApiTests>
               <generateApiDocumentation>true</generateApiDocumentation>
