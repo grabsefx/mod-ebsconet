@@ -23,9 +23,10 @@ public class OrdersController  implements OrdersApi {
     PoLine poLine = new PoLine();
     poLine.setPoLineNumber(poLineNumber);
 
-    return new ResponseEntity<PoLine>(poLine, HttpStatus.OK);
+    return new ResponseEntity<>(poLine, HttpStatus.OK);
   }
 
+  @Override
   public ResponseEntity<Void> putPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber, @ApiParam(value = "" ,required=true )  @Valid @RequestBody PoLine poLine) {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
