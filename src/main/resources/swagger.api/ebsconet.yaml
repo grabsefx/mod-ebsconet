@@ -50,11 +50,6 @@ paths:
       responses:
         '200':
           description: OK
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: OK
         '400':
           description: Bad request
           content:
@@ -77,6 +72,12 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/poLineNumber"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/poLine"
+        required: true
 components:
   schemas:
     poLine:

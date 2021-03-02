@@ -11,9 +11,15 @@
       "handlers": [
         {
           "methods": ["GET"],
-          "pathPattern": "/ebsconet/order-lines/{polNumber}",
-          "permissionsRequired": ["ebsconet.order-lines.get"],
-          "modulePermissions": ["ebsconet.order-lines.get"]
+          "pathPattern": "/ebsconet/orders/order-lines/{polNumber}",
+          "permissionsRequired": ["ebsconet.order-lines.item.get"],
+          "modulePermissions": []
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/ebsconet/orders/order-lines/{polNumber}",
+          "permissionsRequired": ["ebsconet.order-lines.item.put"],
+          "modulePermissions": []
         }
       ]
     }
@@ -24,13 +30,19 @@
       "displayName": "Ebsconet API module - all permissions",
       "description": "All permissions for ebsconet module",
       "subPermissions": [
-        "ebsconet.order-lines.get"
+        "ebsconet.order-lines.item.get",
+        "ebsconet.order-lines.item.put"
       ]
     },
     {
-      "permissionName": "ebsconet.order-lines.get",
-      "displayName": "get order lines, related to the product order line number",
-      "description": "Get list of order lines"
+      "permissionName": "ebsconet.order-lines.item.get",
+      "displayName": "get order line, related to the order line number",
+      "description": "Get list of order line"
+    },
+    {
+      "permissionName": "ebsconet.order-lines.item.put",
+      "displayName": "update order line, related to the order line number",
+      "description": "Update order line"
     }
   ],
   "launchDescriptor": {
