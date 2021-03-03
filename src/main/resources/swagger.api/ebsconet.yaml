@@ -17,26 +17,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/poLine"
         '400':
-          description: Bad request
+          description:
+            Bad request, e.g. malformed request body or query parameter.
+            Details of the error (e.g. name of the parameter or line/character number
+            with malformed data) provided in the response.
           content:
-            text/plain:
+            application/json:
+              example:
+                $ref: "#/components/examples/error"
               schema:
-                type: string
-                example: Bad request
+                $ref: "#/components/schemas/error"
         '404':
-          description: Product order line not found
+          description: Purchase order line with a given number not found
           content:
-            text/plain:
+            application/json:
+              example:
+                $ref: "#/components/examples/error"
               schema:
-                type: string
-                example: Product order line not found
+                $ref: "#/components/schemas/error"
         '500':
-          description: Internal server error
+          description: Internal server error, e.g. due to misconfiguration
           content:
-            text/plain:
+            application/json:
+              example:
+                $ref: "#/components/examples/error"
               schema:
-                type: string
-                example: Internal server error
+                $ref: "#/components/schemas/error"
       operationId: getPoLine
       parameters:
         - name: poLineNumber
@@ -51,19 +57,24 @@ paths:
         '200':
           description: OK
         '400':
-          description: Bad request
+          description:
+            Bad request, e.g. malformed request body or query parameter.
+            Details of the error (e.g. name of the parameter or line/character number
+            with malformed data) provided in the response.
           content:
-            text/plain:
+            application/json:
+              example:
+                $ref: "#/components/examples/error"
               schema:
-                type: string
-                example: Bad request
+                $ref: "#/components/schemas/error"
         '500':
-          description: Internal server error
+          description: Internal server error, e.g. due to misconfiguration
           content:
-            text/plain:
+            application/json:
+              example:
+                $ref: "#/components/examples/error"
               schema:
-                type: string
-                example: Internal server error
+                $ref: "#/components/schemas/error"
       operationId: putPoLine
       parameters:
         - name: poLineNumber
@@ -84,3 +95,9 @@ components:
       $ref: schemas/ebsconet_order_line.json
     poLineNumber:
       $ref: schemas/order_line_number.json
+    error:
+      $ref: schemas/common/error.json#/Error
+  examples:
+    error:
+      value:
+        $ref: examples/error.sample
