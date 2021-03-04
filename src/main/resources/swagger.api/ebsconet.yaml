@@ -43,7 +43,7 @@ paths:
                 $ref: "#/components/examples/error"
               schema:
                 $ref: "#/components/schemas/error"
-      operationId: getPoLine
+      operationId: getEbsconetOrderLine
       parameters:
         - name: poLineNumber
           in: path
@@ -75,7 +75,7 @@ paths:
                 $ref: "#/components/examples/error"
               schema:
                 $ref: "#/components/schemas/error"
-      operationId: putPoLine
+      operationId: putEbsconetOrderLine
       parameters:
         - name: poLineNumber
           in: path
@@ -93,8 +93,6 @@ components:
   schemas:
     ebsconetOrderLine:
       $ref: schemas/ebsconet_order_line.json
-#    poLine:
-#      $ref: schemas/ebsconet_order_line.json
     poLineNumber:
       $ref: schemas/order_line_number.json
     error:
