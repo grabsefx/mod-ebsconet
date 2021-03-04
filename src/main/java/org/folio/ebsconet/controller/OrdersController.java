@@ -1,9 +1,9 @@
 package org.folio.ebsconet.controller;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-
-import org.folio.ebsconet.domain.dto.PoLine;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
+import org.folio.ebsconet.domain.dto.EbsconetOrderLine;
 import org.folio.ebsconet.rest.resource.OrdersApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.swagger.annotations.ApiParam;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 @RestController
 @RequestMapping(value = "/ebsconet")
 public class OrdersController  implements OrdersApi {
   public static final String PO_LINE_NUMBER = "268758-03";
-  public static final String stubLine = "{\n" +
+  public static final String STUB_LINE = "{\n" +
     "  \"vendor\": \"AMAZ\",\n" +
     "  \"cancellationRestriction\": false,\n" +
     "  \"cancellationRestrictionNote\": \"Any note\",\n" +
@@ -40,13 +38,15 @@ public class OrdersController  implements OrdersApi {
     "}";
 
   @Override
-  public ResponseEntity<PoLine> getPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$")
+  public ResponseEntity<EbsconetOrderLine> getPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$")
                                             @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber) {
-    PoLine poLine;
+
+    EbsconetOrderLine ebsconetOrderLine;
     ObjectMapper objectMapper = new ObjectMapper();
+
     try {
-      poLine = objectMapper.readValue(stubLine, PoLine.class);
-      if (!poLine.getPoLineNumber().equals(poLineNumber)) {
+      ebsconetOrderLine = objectMapper.readValue(STUB_LINE, EbsconetOrderLine.class);
+      if (!ebsconetOrderLine.getPoLineNumber().equals(poLineNumber)) {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
       if (!PO_LINE_NUMBER.equals(poLineNumber)) {
@@ -55,16 +55,16 @@ public class OrdersController  implements OrdersApi {
     } catch (JsonProcessingException e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    return new ResponseEntity<>(poLine, HttpStatus.OK);
+    return new ResponseEntity<>(ebsconetOrderLine, HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<Void> putPoLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber,
-                                        @ApiParam(value = "" ,required=true )  @Valid @RequestBody PoLine poLine) {
+                                        @ApiParam(value = "" ,required=true )  @Valid @RequestBody EbsconetOrderLine ebsconetOrderLine) {
     ObjectMapper objectMapper = new ObjectMapper();
     try {
-      poLine = objectMapper.readValue(stubLine, PoLine.class);
-      if (!poLine.getPoLineNumber().equals(poLineNumber)) {
+      ebsconetOrderLine = objectMapper.readValue(STUB_LINE, EbsconetOrderLine.class);
+      if (!ebsconetOrderLine.getPoLineNumber().equals(poLineNumber)) {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
     } catch (JsonProcessingException e) {

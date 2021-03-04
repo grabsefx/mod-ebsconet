@@ -15,7 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/poLine"
+                $ref: "#/components/schemas/ebsconetOrderLine"
         '400':
           description:
             Bad request, e.g. malformed request body or query parameter.
@@ -87,12 +87,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/poLine"
+              $ref: "#/components/schemas/ebsconetOrderLine"
         required: true
 components:
   schemas:
-    poLine:
+    ebsconetOrderLine:
       $ref: schemas/ebsconet_order_line.json
+#    poLine:
+#      $ref: schemas/ebsconet_order_line.json
     poLineNumber:
       $ref: schemas/order_line_number.json
     error:
