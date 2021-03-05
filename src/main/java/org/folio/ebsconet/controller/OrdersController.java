@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.log4j.Log4j2;
 import org.folio.ebsconet.domain.dto.EbsconetOrderLine;
 import org.folio.ebsconet.rest.resource.OrdersApi;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,23 +23,22 @@ import javax.validation.constraints.Pattern;
 public class OrdersController implements OrdersApi {
 
   public static final String PO_LINE_NUMBER = "268758-03";
-  public static final String STUB_EBSCONET_ORDER_LINE = "{\n" +
-    "  \"vendor\": \"AMAZ\",\n" +
-    "  \"cancellationRestriction\": false,\n" +
-    "  \"cancellationRestrictionNote\": \"Any note\",\n" +
-    "  \"unitPrice\": 1,\n" +
-    "  \"currency\": \"USD\",\n" +
-    "  \"vendorReferenceNumber\": \"2019-184\",\n" +
-    "  \"poNumber\": \"268758\",\n" +
-    "  \"poLineNumber\": \"" + PO_LINE_NUMBER + "\",\n" +
-    "  \"subscriptionToDate\": \"2018-10-05T00:00:00.000Z\",\n" +
-    "  \"subscriptionFromDate\": \"2019-10-05T00:00:00.000Z\",\n" +
-    "  \"quantity\": 1,\n" +
-    "  \"fundCode\": \"HIST\",\n" +
-    "  \"publisherName\": \"MIT Press\",\n" +
-    "  \"vendorAccountNumber\": \"1121112569489\",\n" +
-    "  \"workflowStatus\": \"Pending\"\n" +
-    "}";
+  public static final String STUB_EBSCONET_ORDER_LINE = new JSONObject()
+    .put("vendor", "AMAZ")
+    .put("cancellationRestriction", false)
+    .put("cancellationRestrictionNote", "Any note")
+    .put("unitPrice", 1)
+    .put("currency", "USD")
+    .put("vendorReferenceNumber", "2019-184")
+    .put("poNumber", PO_LINE_NUMBER)
+    .put("subscriptionToDate", "2018-10-05T00:00:00.000Z")
+    .put("subscriptionFromDate", "2019-10-05T00:00:00.000Z")
+    .put("quantity", 1)
+    .put("fundCode", "HIST")
+    .put("publisherName", "MIT Press")
+    .put("vendorAccountNumber", "1121112569489")
+    .put("workflowStatus", "Pending")
+    .toString();
 
   EbsconetOrderLine orderLine;
   ObjectMapper objectMapper;
