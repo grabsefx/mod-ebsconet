@@ -2,16 +2,21 @@ package org.folio.ebsconet.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.log4j.Log4j2;
 import org.folio.ebsconet.domain.dto.EbsconetOrderLine;
 import org.folio.ebsconet.rest.resource.OrdersApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
+@Log4j2
 @RestController
 @RequestMapping(value = "/ebsconet")
 public class OrdersController implements OrdersApi {
@@ -39,7 +44,7 @@ public class OrdersController implements OrdersApi {
   ObjectMapper objectMapper;
 
   @Override
-  public ResponseEntity<EbsconetOrderLine> getEbsconetOrderLine(@Pattern(regexp = "^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") String poLineNumber) {
+  public ResponseEntity<EbsconetOrderLine> getEbsconetOrderLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber) {
     try {
       orderLine = objectMapper.readValue(STUB_EBSCONET_ORDER_LINE, EbsconetOrderLine.class);
 
@@ -55,7 +60,7 @@ public class OrdersController implements OrdersApi {
   }
 
   @Override
-  public ResponseEntity<Void> putEbsconetOrderLine(@Pattern(regexp = "^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") String poLineNumber, @Valid EbsconetOrderLine ebsconetOrderLine) {
+  public ResponseEntity<Void> putEbsconetOrderLine(@Pattern(regexp="^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$") @ApiParam(value = "product order line number",required=true) @PathVariable("poLineNumber") String poLineNumber,@ApiParam(value = "" ,required=true )  @Valid @RequestBody EbsconetOrderLine ebsconetOrderLine) {
     try {
       orderLine = objectMapper.readValue(STUB_EBSCONET_ORDER_LINE, EbsconetOrderLine.class);
 
