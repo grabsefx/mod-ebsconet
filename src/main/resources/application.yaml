@@ -24,5 +24,10 @@ feign:
 management:
   endpoints:
     web:
+      base-path: /ebsconet/admin
       exposure:
-        include: info,health,env,httptrace
+        include:
+          - info
+          - health
+          - env
+          - httptrace
