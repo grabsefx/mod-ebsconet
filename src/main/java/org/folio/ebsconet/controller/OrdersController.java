@@ -41,7 +41,7 @@ public class OrdersController implements OrdersApi {
     .toString();
 
   EbsconetOrderLine orderLine;
-  ObjectMapper objectMapper;
+  ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
   public ResponseEntity<EbsconetOrderLine> getEbsconetOrderLine(String poLineNumber) {
