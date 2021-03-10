@@ -13,6 +13,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/validationResponse"
       operationId: getValidation
   /orders/order-lines/{poLineNumber}:
     description: Orders API
@@ -104,6 +108,8 @@ components:
       $ref: schemas/ebsconet_order_line.json
     poLineNumber:
       $ref: schemas/order_line_number.json
+    validationResponse:
+      $ref: schemas/validation_response.json
     error:
       $ref: schemas/common/error.json#/Error
   examples:
