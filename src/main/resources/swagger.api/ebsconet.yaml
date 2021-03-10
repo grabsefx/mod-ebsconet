@@ -6,7 +6,20 @@ info:
 servers:
   - url: /ebsconet/
 paths:
+  /validate:
+    description: Validation API
+    get:
+      summary: Validate
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/validationResponse"
+      operationId: getValidation
   /orders/order-lines/{poLineNumber}:
+    description: Orders API
     get:
       summary: Get single Ebsconet product order line
       responses:
@@ -15,7 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/poLine"
+                $ref: "#/components/schemas/ebsconetOrderLine"
         '400':
           description:
             Bad request, e.g. malformed request body or query parameter.
@@ -43,7 +56,7 @@ paths:
                 $ref: "#/components/examples/error"
               schema:
                 $ref: "#/components/schemas/error"
-      operationId: getPoLine
+      operationId: getEbsconetOrderLine
       parameters:
         - name: poLineNumber
           in: path
@@ -75,7 +88,7 @@ paths:
                 $ref: "#/components/examples/error"
               schema:
                 $ref: "#/components/schemas/error"
-      operationId: putPoLine
+      operationId: putEbsconetOrderLine
       parameters:
         - name: poLineNumber
           in: path
@@ -87,14 +100,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/poLine"
+              $ref: "#/components/schemas/ebsconetOrderLine"
         required: true
 components:
   schemas:
-    poLine:
+    ebsconetOrderLine:
       $ref: schemas/ebsconet_order_line.json
     poLineNumber:
       $ref: schemas/order_line_number.json
+    validationResponse:
+      $ref: schemas/validation_response.json
     error:
       $ref: schemas/common/error.json#/Error
   examples:

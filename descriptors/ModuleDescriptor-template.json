@@ -10,15 +10,33 @@
       "version": "1.0",
       "handlers": [
         {
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "pathPattern": "/ebsconet/orders/order-lines/{polNumber}",
-          "permissionsRequired": ["ebsconet.order-lines.item.get"],
+          "permissionsRequired": [
+            "ebsconet.order-lines.item.get"
+          ],
           "modulePermissions": []
         },
         {
-          "methods": ["PUT"],
+          "methods": [
+            "PUT"
+          ],
           "pathPattern": "/ebsconet/orders/order-lines/{polNumber}",
-          "permissionsRequired": ["ebsconet.order-lines.item.put"],
+          "permissionsRequired": [
+            "ebsconet.order-lines.item.put"
+          ],
+          "modulePermissions": []
+        },
+        {
+          "methods": [
+            "GET"
+          ],
+          "pathPattern": "/ebsconet/validate",
+          "permissionsRequired": [
+            "ebsconet.orders.validate.get"
+          ],
           "modulePermissions": []
         }
       ]
@@ -31,7 +49,8 @@
       "description": "All permissions for ebsconet module",
       "subPermissions": [
         "ebsconet.order-lines.item.get",
-        "ebsconet.order-lines.item.put"
+        "ebsconet.order-lines.item.put",
+        "ebsconet.orders.validate.get"
       ]
     },
     {
@@ -43,6 +62,11 @@
       "permissionName": "ebsconet.order-lines.item.put",
       "displayName": "update order line, related to the order line number",
       "description": "Update order line"
+    },
+    {
+      "permissionName": "ebsconet.orders.validate.get",
+      "displayName": "validate order",
+      "description": "Validate order"
     }
   ],
   "launchDescriptor": {

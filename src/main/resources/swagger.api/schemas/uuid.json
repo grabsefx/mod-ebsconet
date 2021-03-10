@@ -1,4 +1,5 @@
 {
+  "id": "uuid",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "description": "Regexp pattern for UUID validation",
   "type": "string",
