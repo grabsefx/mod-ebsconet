@@ -6,7 +6,16 @@ info:
 servers:
   - url: /ebsconet/
 paths:
+  /validate:
+    description: Validation API
+    get:
+      summary: Validate
+      responses:
+        '200':
+          description: OK
+      operationId: getValidation
   /orders/order-lines/{poLineNumber}:
+    description: Orders API
     get:
       summary: Get single Ebsconet product order line
       responses:
