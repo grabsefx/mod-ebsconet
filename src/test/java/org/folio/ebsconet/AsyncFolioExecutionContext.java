@@ -1,4 +1,4 @@
-package org.folio.ebsconet.domain;
+package org.folio.ebsconet;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

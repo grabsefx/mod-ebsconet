@@ -46,7 +46,7 @@ public class TestBase {
   @BeforeEach
   void setUp() {
     FolioExecutionScopeExecutionContextManager.beginFolioExecutionContext(
-      org.folio.ebsconet.domain.AsyncFolioExecutionContext.builder()
+      AsyncFolioExecutionContext.builder()
         .tenantId(TEST_TENANT)
         .moduleMetadata(moduleMetadata)
         .okapiUrl(getOkapiUrl()).build());
