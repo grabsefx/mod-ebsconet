@@ -17,7 +17,6 @@ public class AsyncFolioExecutionContext implements FolioExecutionContext {
 
   private final UUID userId;
   private final String userName;
-  private final String password;
   private final String token;
   private final String okapiUrl;
   private final String tenantId;

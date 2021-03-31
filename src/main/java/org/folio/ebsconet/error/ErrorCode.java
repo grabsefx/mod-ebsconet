@@ -3,8 +3,7 @@ package org.folio.ebsconet.error;
 public enum ErrorCode {
   UNKNOWN_ERROR("Unknown error"),
   VALIDATION_ERROR("Validation error"),
-  NOT_FOUND_ERROR("Not found"),
-  DATE_FORMAT_ERROR("Date format error");
+  NOT_FOUND_ERROR("Not found");
 
   private final String description;
 

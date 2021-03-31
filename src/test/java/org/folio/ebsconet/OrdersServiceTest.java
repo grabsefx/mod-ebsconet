@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.times;
@@ -120,5 +121,30 @@ class OrdersServiceTest {
     when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
 
     assertThrows(ResourceNotFoundException.class, () -> ordersService.getEbsconetOrderLine(poLineNumber));
+  }
+
+  @Test
+  void testGetEbsconetOrderLineWithNoFundDistributionCode() {
+    String poLineNumber = "268758-03";
+    PoLine pol = preparePoLine(poLineNumber);
+    pol.setFundDistribution(null);
+
+    var polResult = new PoLineCollection();
+    polResult.addPoLinesItem(pol);
+    polResult.setTotalRecords(1);
+
+    String vendorId = "168f8a86-d26c-406e-813f-c7527f241ac3";
+    Organization vendorOrg = prepareOrganization(vendorId);
+
+    String poId = "d79b0bcc-DcAD-1E4E-Abb7-DbFcaD5BB3bb";
+    PurchaseOrder po = preparePurchaseOrder(poId, vendorId);
+
+    when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
+    when(ordersClient.getOrderById(poId)).thenReturn(po);
+    when(organizationClient.getOrganizationById(vendorId)).thenReturn(vendorOrg);
+
+    EbsconetOrderLine ebsconetOL = ordersService.getEbsconetOrderLine(poLineNumber);
+
+    assertThat(ebsconetOL.getFundCode(), nullValue());
   }
 }

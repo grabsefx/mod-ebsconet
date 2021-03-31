@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import static org.folio.ebsconet.TestUtils.equalsToJSONMock;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,6 +19,7 @@ class OrdersControllerTest extends TestBase {
   private static final String PO_LINE_NUMBER = "268758-03";
   private static final String UNKNOWN_PO_LINE_NUMBER = "268758-07";
   private static final String INVALID_PO_LINE_NUMBER = "13245";
+  private static final String PO_LINE_WITH_BAD_DATE = "268758-04";
   private String poLineUrl;
 
   @BeforeEach
@@ -46,5 +48,13 @@ class OrdersControllerTest extends TestBase {
     HttpClientErrorException exception = assertThrows(HttpClientErrorException.class,
       () -> get(urlWithInvalidUuid, EbsconetOrderLine.class));
     assertThat(exception.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+  }
+
+  @Test
+  void shouldReturnInternalErrorForInternalDateParsingIssue() {
+    String urlWithInvalidUuid = poLineUrl + PO_LINE_WITH_BAD_DATE;
+    HttpServerErrorException exception = assertThrows(HttpServerErrorException.class,
+      () -> get(urlWithInvalidUuid, EbsconetOrderLine.class));
+    assertThat(exception.getStatusCode(), equalTo(HttpStatus.INTERNAL_SERVER_ERROR));
   }
 }
