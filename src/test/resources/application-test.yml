@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: mod-ebsconet
+  jackson:
+    default-property-inclusion: non_null
+  liquibase:
+    enabled: false
+  flyway:
+    enabled: false
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+
+logging:
+  level:
+    org:
+      springframework:
+        cache: OFF
+
+server.port: 8081
+folio.tenant.validation.enabled: true

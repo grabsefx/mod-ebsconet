@@ -1,0 +1,21 @@
+{
+  "vendor": "AMAZ",
+  "cancellationRestriction": false,
+  "cancellationRestrictionNote": "Cancellation Restriction Note",
+  "unitPrice": 1,
+  "currency": "USD",
+  "vendorReferenceNumbers": [
+    {
+      "refNumber": "123456-78",
+      "refNumberType": "Vendor title number"
+    }
+  ],
+  "poLineNumber": "268758-03",
+  "subscriptionToDate": "2018-10-05T00:00:00.000Z",
+  "subscriptionFromDate": "2019-10-05T00:00:00.000Z",
+  "quantity": 1,
+  "fundCode": "HIST",
+  "publisherName": "MIT Press",
+  "vendorAccountNumber": "8910-25",
+  "workflowStatus": "Open"
+}

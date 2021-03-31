@@ -1,0 +1,17 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/orders/composite-orders/d79b0bcc-DcAD-1E4E-Abb7-DbFcaD5BB3bb"
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"id\": \"d79b0bcc-DcAD-1E4E-Abb7-DbFcaD5BB3bb\",\n  \"notes\": [\"Notes in the purchase order\"],\n  \"poNumber\": \"A268758XYZ\",\n  \"vendor\": \"168f8a86-d26c-406e-813f-c7527f241ac3\",\n  \"workflowStatus\": \"Open\"\n}\n",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}

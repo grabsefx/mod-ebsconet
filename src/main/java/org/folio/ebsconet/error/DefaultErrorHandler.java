@@ -1,0 +1,102 @@
+package org.folio.ebsconet.error;
+
+import lombok.extern.log4j.Log4j2;
+import org.folio.ebsconet.domain.dto.Error;
+import org.folio.ebsconet.domain.dto.Errors;
+import org.folio.ebsconet.domain.dto.Parameter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
+
+import java.time.format.DateTimeParseException;
+
+import static org.folio.ebsconet.error.ErrorCode.DATE_FORMAT_ERROR;
+import static org.folio.ebsconet.error.ErrorCode.NOT_FOUND_ERROR;
+import static org.folio.ebsconet.error.ErrorCode.UNKNOWN_ERROR;
+import static org.folio.ebsconet.error.ErrorCode.VALIDATION_ERROR;
+import static org.folio.ebsconet.error.ErrorType.INTERNAL;
+import static org.folio.ebsconet.error.ErrorType.UNKNOWN;
+
+@ControllerAdvice
+@Log4j2
+public class DefaultErrorHandler {
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Errors> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+    log.error("DefaultErrorHandler: ArgumentNotValidException: " + exception.getMessage());
+    Errors errors = new Errors();
+    exception.getBindingResult()
+      .getAllErrors().forEach(er -> errors.addErrorsItem(new Error()
+      .message(er.getDefaultMessage())
+      .code(VALIDATION_ERROR.getDescription())
+      .type(INTERNAL.getValue())
+      .addParametersItem(new Parameter()
+        .key(((FieldError) er).getField())
+        .value(String.valueOf(((FieldError) er).getRejectedValue())))));
+    errors.setTotalRecords(errors.getErrors().size());
+    return ResponseEntity.unprocessableEntity().body(errors);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<Errors> handleConstraintViolation(final ConstraintViolationException exception) {
+    log.error("DefaultErrorHandler: ConstraintViolationException: " + exception.getMessage());
+    Errors errors = new Errors();
+    exception.getConstraintViolations().forEach(constraintViolation ->
+      errors.addErrorsItem(new Error()
+        .message(constraintViolation.getMessage())
+        .code(VALIDATION_ERROR.getDescription())
+        .type(INTERNAL.getValue())));
+    errors.setTotalRecords(errors.getErrors().size());
+    return ResponseEntity
+      .badRequest()
+      .body(errors);
+  }
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<Errors> handleNotFoundExceptions(final ResourceNotFoundException exception) {
+    log.error("DefaultErrorHandler: ResourceNotFoundException: " + exception.getMessage());
+    Errors errors = new Errors();
+    errors.addErrorsItem(new Error()
+      .message(exception.getMessage())
+      .code(NOT_FOUND_ERROR.getDescription())
+      .type(INTERNAL.getValue()));
+    errors.setTotalRecords(1);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+      .body(errors);
+  }
+
+  @ExceptionHandler(DateTimeParseException.class)
+  public ResponseEntity<Errors> handleDateTimeFormatExceptions(final DateTimeParseException exception) {
+    log.error("DefaultErrorHandler: DateTimeParseException: " + exception.getMessage());
+    Errors errors = new Errors();
+    errors.addErrorsItem(new Error()
+      .message(exception.getMessage())
+      .code(DATE_FORMAT_ERROR.getDescription())
+      .type(INTERNAL.getValue()));
+    errors.setTotalRecords(1);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+      .body(errors);
+  }
+
+  @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, IllegalStateException.class })
+  public ResponseEntity<Errors> handleInternal(final RuntimeException exception) {
+    log.error("DefaultErrorHandler: " + exception.getClass().getName() + ": " + exception.getMessage());
+    return buildUnknownErrorResponse(exception.getMessage());
+  }
+
+  private ResponseEntity<Errors> buildUnknownErrorResponse(String message) {
+    return ResponseEntity
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .body(new Errors()
+        .addErrorsItem(new Error()
+          .message(message)
+          .code(UNKNOWN_ERROR.getDescription())
+          .type(UNKNOWN.getValue()))
+        .totalRecords(1));
+  }
+}
