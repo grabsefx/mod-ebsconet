@@ -1,6 +1,5 @@
-package org.folio.ebsconet.controller;
+package org.folio.ebsconet;
 
-import org.folio.ebsconet.TestBase;
 import org.folio.ebsconet.domain.dto.EbsconetOrderLine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class OrdersControllerTest extends TestBase {
+class OrdersControllerTest extends TestBase {
   private static final String PO_LINE_URL = "http://localhost:%s/ebsconet/orders/order-lines/";
   private static final String PO_LINE_NUMBER = "268758-03";
   private static final String UNKNOWN_PO_LINE_NUMBER = "268758-07";

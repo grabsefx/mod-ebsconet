@@ -1,9 +1,10 @@
-package org.folio.ebsconet.service;
+package org.folio.ebsconet;
 
 import org.folio.ebsconet.client.OrdersClient;
 import org.folio.ebsconet.client.OrganizationClient;
 import org.folio.ebsconet.domain.dto.*;
 import org.folio.ebsconet.error.ResourceNotFoundException;
+import org.folio.ebsconet.service.OrdersService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrdersServiceTest {
+class OrdersServiceTest {
   @Mock
   private OrdersClient ordersClient;
   @Mock
