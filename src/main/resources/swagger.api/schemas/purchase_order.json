@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "composite purchase order with dereferenced/expanded orders fields",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "UUID of this purchase order",
+      "type": "string",
+      "$ref": "uuid.json"
+    },
+    "notes": {
+      "description": "free-form notes associated with this purchase order",
+      "id": "notes",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "vendor": {
+      "description": "UUID of the vendorDetails record",
+      "type": "string",
+      "$ref": "uuid.json"
+    },
+    "workflowStatus": {
+      "description": "the workflow status for this purchase order",
+      "type": "string",
+      "$ref": "workflow_status.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "vendor"
+  ]
+}

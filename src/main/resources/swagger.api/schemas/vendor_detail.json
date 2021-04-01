@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "purchase order line vendor details",
+  "type": "object",
+  "properties": {
+    "vendorAccount": {
+      "description": "the accound number on the vendor's end associated with this purchase order line",
+      "type": "string"
+    },
+    "referenceNumbers": {
+      "description": "Collection of reference number items",
+      "$ref": "reference_numbers.json"
+    }
+  },
+  "additionalProperties": false
+}

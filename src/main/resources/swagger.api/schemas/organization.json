@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "The record of an organization",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique UUID for this organization",
+      "$ref": "common/uuid.json"
+    },
+    "code": {
+      "description": "The code for this organization",
+      "type": "string",
+      "pattern": "[\\S ]+"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "code"
+  ]
+}

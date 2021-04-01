@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "purchase order line details",
+  "type": "object",
+  "properties": {
+    "subscriptionFrom": {
+      "description": "the start date of the subscription",
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    },
+    "subscriptionTo": {
+      "description": "the end date of the subscription",
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
