@@ -2,7 +2,22 @@
   "id": "@artifactId@-@version@",
   "name": "Ebsconet integration business logic module",
   "requires": [
-
+    {
+      "id": "orders",
+      "version": "11"
+    },
+    {
+      "id": "order-lines",
+      "version": "2.0"
+    },
+    {
+      "id": "organizations.organizations",
+      "version": "1.1"
+    },
+    {
+      "id": "finance.funds",
+      "version": "1.4"
+    }
   ],
   "provides": [
     {
@@ -17,7 +32,11 @@
           "permissionsRequired": [
             "ebsconet.order-lines.item.get"
           ],
-          "modulePermissions": []
+          "modulePermissions": [
+            "orders.item.get",
+            "orders.po-lines.collection.get",
+            "organizations.organizations.item.get"
+          ]
         },
         {
           "methods": [
@@ -27,7 +46,12 @@
           "permissionsRequired": [
             "ebsconet.order-lines.item.put"
           ],
-          "modulePermissions": []
+          "modulePermissions": [
+            "finance.funds.collection.get",
+            "orders.po-lines.collection.get",
+            "orders.po-lines.item.get",
+            "orders.po-lines.item.put"
+          ]
         },
         {
           "methods": [
