@@ -104,34 +104,24 @@ paths:
         required: true
 components:
   schemas:
-    cost:
-      $ref: schemas/cost.json
-    details:
-      $ref: schemas/details.json
     ebsconetOrderLine:
-      $ref: schemas/ebsconet_order_line.json
-    fundDistribution:
-      $ref: schemas/fund_distribution.json
+      $ref: schemas/mod-ebsconet/ebsconet_order_line.json
     poLineNumber:
-      $ref: schemas/order_line_number.json
+      $ref: schemas/mod-orders/order_line_number.json
     organization:
-      $ref: schemas/organization.json
+      $ref: schemas/mod-orgs/organization.json
     poLine:
-      $ref: schemas/po_line.json
+      $ref: schemas/mod-orders/po_line.json
     poLineCollection:
-      $ref: schemas/po_line_collection.json
+      $ref: schemas/mod-orders/po_line_collection.json
+    fundCollection:
+      $ref: schemas/mod-finance/fund_collection.json
     purchaseOrder:
-      $ref: schemas/purchase_order.json
-    referenceNumberItem:
-      $ref: schemas/reference_number_item.json
-    referenceNumbers:
-      $ref: schemas/reference_numbers.json
-    validationResponse:
-      $ref: schemas/validation_response.json
-    vendorDetail:
-      $ref: schemas/vendor_detail.json
-    workflowStatus:
-      $ref: schemas/workflow_status.json
+      $ref: schemas/mod-orders/purchase_order.json
+   validationResponse:
+      $ref: schemas/mod-orders/validation_response.json
+   compositePoLine:
+      $ref: schemas/mod-orders/composite_po_line.json
     error:
       $ref: schemas/common/error.json#/Error
     errors:

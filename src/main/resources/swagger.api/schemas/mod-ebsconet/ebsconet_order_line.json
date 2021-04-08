@@ -35,12 +35,12 @@
       "description": "Reference number items array",
       "type": "array",
       "items": {
-        "$ref": "reference_number_item.json"
+        "$ref": "../mod-orders/reference_number_item.json"
       }
     },
     "poLineNumber": {
       "description": "A human readable number assigned to this PO line",
-      "$ref": "order_line_number.json",
+      "$ref": "../mod-orders/order_line_number.json",
       "readOnly": true
     },
     "subscriptionToDate": {
@@ -79,7 +79,7 @@
     },
     "workflowStatus": {
       "description": "the workflow status for the purchase order",
-      "$ref": "workflow_status.json",
+      "$ref": "../mod-orders/workflow_status.json",
       "readOnly": true
     }
   },
