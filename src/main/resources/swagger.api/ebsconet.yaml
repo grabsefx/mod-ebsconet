@@ -118,9 +118,9 @@ components:
       $ref: schemas/mod-finance/fund_collection.json
     purchaseOrder:
       $ref: schemas/mod-orders/purchase_order.json
-   validationResponse:
+    validationResponse:
       $ref: schemas/mod-orders/validation_response.json
-   compositePoLine:
+    compositePoLine:
       $ref: schemas/mod-orders/composite_po_line.json
     error:
       $ref: schemas/common/error.json#/Error
