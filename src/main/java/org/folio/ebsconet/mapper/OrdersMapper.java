@@ -6,7 +6,7 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface OrdersMapper {
+public abstract class OrdersMapper {
   @Mapping(target = "vendor", source = "vendor.code")
   @Mapping(target = "cancellationRestriction", source = "line.cancellationRestriction")
   @Mapping(target = "cancellationRestrictionNote", source = "line.cancellationRestrictionNote")
@@ -21,13 +21,35 @@ public interface OrdersMapper {
   @Mapping(target = "publisherName", source = "line.publisher")
   @Mapping(target = "vendorAccountNumber", source = "line.vendorDetail.vendorAccount")
   @Mapping(target = "workflowStatus", source = "order.workflowStatus")
-  EbsconetOrderLine folioToEbsconet(PurchaseOrder order, PoLine line, Organization vendor);
+  public abstract EbsconetOrderLine folioToEbsconet(PurchaseOrder order, PoLine line, Organization vendor);
 
   @Named("getFundCode")
-  default String getFundCode(PoLine line) {
+  public String getFundCode(PoLine line) {
     List<FundDistribution> distributions = line.getFundDistribution();
     if (distributions == null || distributions.isEmpty())
       return null;
     return distributions.get(0).getCode();
+  }
+
+  public void ebsconetToFolio(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine, Fund fund) {
+    poLine.setCancellationRestriction(ebsconetOrderLine.getCancellationRestriction());
+    poLine.setCancellationRestrictionNote(ebsconetOrderLine.getCancellationRestrictionNote());
+    poLine.getCost().setListUnitPrice(ebsconetOrderLine.getUnitPrice());
+    poLine.getCost().setCurrency(ebsconetOrderLine.getCurrency());
+    poLine.getVendorDetail().setReferenceNumbers(ebsconetOrderLine.getVendorReferenceNumbers());
+    poLine.getDetails().setSubscriptionTo(ebsconetOrderLine.getSubscriptionToDate());
+    poLine.getDetails().setSubscriptionFrom(ebsconetOrderLine.getSubscriptionFromDate());
+    poLine.getVendorDetail().setVendorAccount(ebsconetOrderLine.getVendorAccountNumber());
+    poLine.setPublisher(ebsconetOrderLine.getPublisherName());
+
+    if (poLine.getLocations().size() == 1) {
+      poLine.getCost().setQuantityPhysical(ebsconetOrderLine.getQuantity());
+      poLine.getLocations().get(0).setQuantityPhysical(ebsconetOrderLine.getQuantity());
+    }
+
+    if(fund != null){
+      poLine.getFundDistribution().get(0).setCode(fund.getCode());
+      poLine.getFundDistribution().get(0).setFundId(fund.getId());
+    }
   }
 }

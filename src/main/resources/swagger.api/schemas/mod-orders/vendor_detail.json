@@ -3,6 +3,14 @@
   "description": "purchase order line vendor details",
   "type": "object",
   "properties": {
+    "instructions": {
+      "description": "special instructions for the vendor",
+      "type": "string"
+    },
+    "noteFromVendor": {
+      "description": "free-form notes from the vendor",
+      "type": "string"
+    },
     "vendorAccount": {
       "description": "the accound number on the vendor's end associated with this purchase order line",
       "type": "string"
@@ -12,5 +20,8 @@
       "$ref": "reference_numbers.json"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "required": [
+    "instructions"
+  ]
 }

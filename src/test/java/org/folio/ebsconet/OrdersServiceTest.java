@@ -1,5 +1,13 @@
 package org.folio.ebsconet;
 
+import feign.FeignException;
+import feign.Request;
+import feign.Request.Body;
+import feign.Request.HttpMethod;
+import feign.RequestTemplate;
+import java.util.Collections;
+import java.util.HashMap;
+import org.folio.ebsconet.client.FinanceClient;
 import org.folio.ebsconet.client.OrdersClient;
 import org.folio.ebsconet.client.OrganizationClient;
 import org.folio.ebsconet.domain.dto.*;
@@ -21,7 +29,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +41,8 @@ import static org.mockito.Mockito.when;
 class OrdersServiceTest {
   @Mock
   private OrdersClient ordersClient;
+  @Mock
+  private FinanceClient financeClient;
   @Mock
   private OrganizationClient organizationClient;
   @InjectMocks
@@ -146,5 +159,113 @@ class OrdersServiceTest {
     EbsconetOrderLine ebsconetOL = ordersService.getEbsconetOrderLine(poLineNumber);
 
     assertThat(ebsconetOL.getFundCode(), nullValue());
+  }
+
+  @Test
+  void shouldCallPutIfCallUpdateEbsconetOrderLine(){
+    var ebsconetOrderLine = new EbsconetOrderLine();
+    ebsconetOrderLine.setFundCode("CODE");
+    ebsconetOrderLine.setPoLineNumber("10000-1");
+    ebsconetOrderLine.setCurrency("USD");
+    ebsconetOrderLine.setVendor("VENDOR");
+    ebsconetOrderLine.setUnitPrice(BigDecimal.ONE);
+    ebsconetOrderLine.setQuantity(1);
+
+    var poLineNumber = "10000-1";
+    var polResult = new PoLineCollection();
+    var poLine = new PoLine();
+    poLine.setId("id");
+    polResult.addPoLinesItem(poLine);
+    polResult.setTotalRecords(1);
+
+    var compositePoLine = new CompositePoLine();
+    var fundDistribution = new FundDistribution();
+    fundDistribution.setCode("CODE");
+    compositePoLine.setFundDistribution(Collections.singletonList(fundDistribution));
+    compositePoLine.setCost(new Cost());
+    compositePoLine.setVendorDetail(new VendorDetail());
+    compositePoLine.setDetails(new Details());
+    compositePoLine.setLocations(Collections.singletonList(new Location()));
+
+    when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
+    when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
+
+    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+
+    verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
+    verify(ordersClient, times(1)).getOrderLineById(anyString());
+    verify(ordersClient, times(1)).putOrderLine(anyString(),any());
+    verify(financeClient, never()).getFundsByQuery(any());
+  }
+
+  @Test
+  void shouldCallPutIfCallUpdateEbsconetOrderLineWithDifferentFundCode(){
+    var ebsconetOrderLine = new EbsconetOrderLine();
+    ebsconetOrderLine.setFundCode("DIFFERENT_CODE");
+    ebsconetOrderLine.setPoLineNumber("10000-1");
+    ebsconetOrderLine.setCurrency("USD");
+    ebsconetOrderLine.setVendor("VENDOR");
+    ebsconetOrderLine.setUnitPrice(BigDecimal.ONE);
+    ebsconetOrderLine.setQuantity(1);
+
+    var poLineNumber = "10000-1";
+    var polResult = new PoLineCollection();
+    var poLine = new PoLine();
+    poLine.setId("id");
+    polResult.addPoLinesItem(poLine);
+    polResult.setTotalRecords(1);
+
+    var compositePoLine = new CompositePoLine();
+    var fundDistribution = new FundDistribution();
+    fundDistribution.setCode("CODE");
+    compositePoLine.setFundDistribution(Collections.singletonList(fundDistribution));
+    compositePoLine.setCost(new Cost());
+    compositePoLine.setVendorDetail(new VendorDetail());
+    compositePoLine.setDetails(new Details());
+    compositePoLine.setLocations(Collections.singletonList(new Location()));
+
+    var funds = new FundCollection();
+    var fund = new Fund();
+    fund.setCode("DIFFERENT_CODE");
+    fund.setId("id");
+    funds.setFunds(Collections.singletonList(fund));
+    funds.setTotalRecords(1);
+
+    when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
+    when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
+    when(financeClient.getFundsByQuery(any())).thenReturn(funds);
+
+    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+
+    verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
+    verify(ordersClient, times(1)).getOrderLineById(anyString());
+    verify(ordersClient, times(1)).putOrderLine(anyString(),any());
+    verify(financeClient, times(1)).getFundsByQuery(any());
+  }
+
+  @Test
+  void shouldThrowExceptionIfPoLineNotFound() {
+    var poline = new EbsconetOrderLine();
+    poline.setPoLineNumber("1");
+
+    Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
+    when(ordersClient.getOrderLinesByQuery(any())).thenThrow(new FeignException.NotFound("", request, "".getBytes()));
+    ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,
+      () -> ordersService.updateEbsconetOrderLine(poline));
+    assertThat(resourceNotFoundException.getMessage(),is("PO Line not found: 1"));
+  }
+
+  @Test
+  void shouldThrowExceptionIfPoLineRecordsLessThenOne() {
+    var ebsconetOrderLine = new EbsconetOrderLine();
+    ebsconetOrderLine.setPoLineNumber("1");
+    var lines = new PoLineCollection();
+    lines.setTotalRecords(0);
+
+    when(ordersClient.getOrderLinesByQuery(any())).thenReturn(lines);
+
+    ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,
+      () -> ordersService.updateEbsconetOrderLine(ebsconetOrderLine));
+    assertThat(resourceNotFoundException.getMessage(),is("PO Line not found: 1"));
   }
 }

@@ -31,40 +31,4 @@ public class TestUtils {
       }
     }
   }
-
-  public static IsEqualToJSONMock equalsToJSONMock(String jsonMockFilePath) {
-    return new IsEqualToJSONMock(jsonMockFilePath);
-  }
-
-  public static class IsEqualToJSONMock extends DiagnosingMatcher<Object> {
-    final private String jsonMockFilePath;
-
-    IsEqualToJSONMock(String jsonMockFilePath) {
-      this.jsonMockFilePath = jsonMockFilePath;
-    }
-
-    @Override
-    public void describeTo(final Description description) {
-      description.appendText(jsonMockFilePath);
-    }
-
-    @Override
-    protected boolean matches(final Object actual, final Description mismatchDescription) {
-      try {
-        String expectedJSON = getMockData(jsonMockFilePath);
-        final String actualJSON = toJSONString(actual);
-        final JSONCompareResult result = JSONCompare.compareJSON(expectedJSON, actualJSON, JSONCompareMode.STRICT);
-        if (!result.passed()) {
-          mismatchDescription.appendText(result.getMessage());
-        }
-        return result.passed();
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    private static String toJSONString(final Object o) throws JsonProcessingException {
-      return o instanceof String ? (String) o : new ObjectMapper().writeValueAsString(o);
-    }
-  }
 }

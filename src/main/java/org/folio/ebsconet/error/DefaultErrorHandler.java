@@ -1,5 +1,6 @@
 package org.folio.ebsconet.error;
 
+import feign.FeignException.InternalServerError;
 import lombok.extern.log4j.Log4j2;
 import org.folio.ebsconet.domain.dto.Error;
 import org.folio.ebsconet.domain.dto.Errors;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 
+import static org.folio.ebsconet.error.ErrorCode.INTERNAL_SERVER_ERROR;
 import static org.folio.ebsconet.error.ErrorCode.NOT_FOUND_ERROR;
 import static org.folio.ebsconet.error.ErrorCode.UNKNOWN_ERROR;
 import static org.folio.ebsconet.error.ErrorCode.VALIDATION_ERROR;
@@ -45,6 +47,19 @@ public class DefaultErrorHandler {
       .type(INTERNAL.getValue()));
     errors.setTotalRecords(1);
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
+      .body(errors);
+  }
+
+  @ExceptionHandler(InternalServerError.class)
+  public ResponseEntity<Errors> handleInternalServerError(final InternalServerError exception) {
+    log.error("DefaultErrorHandler: InternalServerError: " + exception.getMessage());
+    Errors errors = new Errors();
+    errors.addErrorsItem(new Error()
+      .message(exception.getMessage())
+      .code(INTERNAL_SERVER_ERROR.getDescription())
+      .type(INTERNAL.getValue()));
+    errors.setTotalRecords(1);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
       .body(errors);
   }
 
