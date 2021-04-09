@@ -199,6 +199,51 @@ class OrdersServiceTest {
   }
 
   @Test
+  void shouldCallPutIfCallUpdateEbsconetOrderLineWithDifferentFundCode(){
+    var ebsconetOrderLine = new EbsconetOrderLine();
+    ebsconetOrderLine.setFundCode("DIFFERENT_CODE");
+    ebsconetOrderLine.setPoLineNumber("10000-1");
+    ebsconetOrderLine.setCurrency("USD");
+    ebsconetOrderLine.setVendor("VENDOR");
+    ebsconetOrderLine.setUnitPrice(BigDecimal.ONE);
+    ebsconetOrderLine.setQuantity(1);
+
+    var poLineNumber = "10000-1";
+    var polResult = new PoLineCollection();
+    var poLine = new PoLine();
+    poLine.setId("id");
+    polResult.addPoLinesItem(poLine);
+    polResult.setTotalRecords(1);
+
+    var compositePoLine = new CompositePoLine();
+    var fundDistribution = new FundDistribution();
+    fundDistribution.setCode("CODE");
+    compositePoLine.setFundDistribution(Collections.singletonList(fundDistribution));
+    compositePoLine.setCost(new Cost());
+    compositePoLine.setVendorDetail(new VendorDetail());
+    compositePoLine.setDetails(new Details());
+    compositePoLine.setLocations(Collections.singletonList(new Location()));
+
+    var funds = new FundCollection();
+    var fund = new Fund();
+    fund.setCode("DIFFERENT_CODE");
+    fund.setId("id");
+    funds.setFunds(Collections.singletonList(fund));
+    funds.setTotalRecords(1);
+
+    when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
+    when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
+    when(financeClient.getFundsByQuery(any())).thenReturn(funds);
+
+    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+
+    verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
+    verify(ordersClient, times(1)).getOrderLineById(anyString());
+    verify(ordersClient, times(1)).putOrderLine(anyString(),any());
+    verify(financeClient, times(1)).getFundsByQuery(any());
+  }
+
+  @Test
   void shouldThrowExceptionIfPoLineNotFound() {
     var poline = new EbsconetOrderLine();
     poline.setPoLineNumber("1");
