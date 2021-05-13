@@ -1,6 +1,7 @@
 package org.folio.ebsconet.error;
 
 import feign.FeignException.InternalServerError;
+import feign.FeignException.UnprocessableEntity;
 import lombok.extern.log4j.Log4j2;
 import org.folio.ebsconet.domain.dto.Error;
 import org.folio.ebsconet.domain.dto.Errors;
@@ -25,7 +26,7 @@ public class DefaultErrorHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<Errors> handleConstraintViolation(final ConstraintViolationException exception) {
     log.error("DefaultErrorHandler: ConstraintViolationException: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     exception.getConstraintViolations().forEach(constraintViolation ->
       errors.addErrorsItem(new Error()
         .message(constraintViolation.getMessage())
@@ -40,7 +41,7 @@ public class DefaultErrorHandler {
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<Errors> handleNotFoundExceptions(final ResourceNotFoundException exception) {
     log.error("DefaultErrorHandler: ResourceNotFoundException: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     errors.addErrorsItem(new Error()
       .message(exception.getMessage())
       .code(NOT_FOUND_ERROR.getDescription())
@@ -53,13 +54,25 @@ public class DefaultErrorHandler {
   @ExceptionHandler(InternalServerError.class)
   public ResponseEntity<Errors> handleInternalServerError(final InternalServerError exception) {
     log.error("DefaultErrorHandler: InternalServerError: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     errors.addErrorsItem(new Error()
       .message(exception.getMessage())
       .code(INTERNAL_SERVER_ERROR.getDescription())
       .type(INTERNAL.getValue()));
     errors.setTotalRecords(1);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .body(errors);
+  }
+
+  @ExceptionHandler(UnprocessableEntity.class)
+  public ResponseEntity<Errors> handleUnprocessableEntityError(final UnprocessableEntity exception) {
+    log.error("DefaultErrorHandler: UnprocessableEntity: " + exception.getMessage());
+    var errors = new Errors();
+    errors.addErrorsItem(new Error()
+      .message(exception.getMessage())
+      .type(INTERNAL.getValue()));
+    errors.setTotalRecords(1);
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
       .body(errors);
   }
 

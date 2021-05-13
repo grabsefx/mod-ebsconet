@@ -14,6 +14,22 @@
       "type": "string",
       "format": "date-time",
       "nullable": true
+    },
+    "receivingNote": {
+      "description": "notes regarding receiving instructions",
+      "type": "string"
+    },
+    "productIds": {
+      "description": "a list of product identifiers",
+      "id": "productIds",
+      "type": "array",
+      "items": {
+        "$ref": "product_identifier.json"
+      }
+    },
+    "subscriptionInterval": {
+      "description": "the subscription interval in days",
+      "type": "integer"
     }
   },
   "additionalProperties": false
