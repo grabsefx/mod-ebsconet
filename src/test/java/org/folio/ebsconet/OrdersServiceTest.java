@@ -162,6 +162,44 @@ class OrdersServiceTest {
   }
 
   @Test
+  void shouldCallPutIfCallUpdateEbsconetOrderLineWithElectronic(){
+    var ebsconetOrderLine = new EbsconetOrderLine();
+    ebsconetOrderLine.setFundCode("CODE");
+    ebsconetOrderLine.setPoLineNumber("10000-1");
+    ebsconetOrderLine.setCurrency("USD");
+    ebsconetOrderLine.setVendor("VENDOR");
+    ebsconetOrderLine.setUnitPrice(BigDecimal.ONE);
+    ebsconetOrderLine.setQuantity(1);
+
+    var poLineNumber = "10000-1";
+    var polResult = new PoLineCollection();
+    var poLine = new PoLine();
+    poLine.setId("id");
+    polResult.addPoLinesItem(poLine);
+    polResult.setTotalRecords(1);
+
+    var compositePoLine = new CompositePoLine();
+    var fundDistribution = new FundDistribution();
+    fundDistribution.setCode("CODE");
+    compositePoLine.setFundDistribution(Collections.singletonList(fundDistribution));
+    compositePoLine.setCost(new Cost());
+    compositePoLine.setVendorDetail(new VendorDetail());
+    compositePoLine.setDetails(new Details());
+    compositePoLine.setLocations(Collections.singletonList(new Location()));
+    compositePoLine.setOrderFormat(OrderFormat.ELECTRONIC_RESOURCE);
+
+    when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
+    when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
+
+    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+
+    verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
+    verify(ordersClient, times(1)).getOrderLineById(anyString());
+    verify(ordersClient, times(1)).putOrderLine(anyString(),any());
+    verify(financeClient, never()).getFundsByQuery(any());
+  }
+
+  @Test
   void shouldCallPutIfCallUpdateEbsconetOrderLine(){
     var ebsconetOrderLine = new EbsconetOrderLine();
     ebsconetOrderLine.setFundCode("CODE");

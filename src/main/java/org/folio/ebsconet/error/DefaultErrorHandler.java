@@ -26,7 +26,7 @@ public class DefaultErrorHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<Errors> handleConstraintViolation(final ConstraintViolationException exception) {
     log.error("DefaultErrorHandler: ConstraintViolationException: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     exception.getConstraintViolations().forEach(constraintViolation ->
       errors.addErrorsItem(new Error()
         .message(constraintViolation.getMessage())
@@ -41,7 +41,7 @@ public class DefaultErrorHandler {
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<Errors> handleNotFoundExceptions(final ResourceNotFoundException exception) {
     log.error("DefaultErrorHandler: ResourceNotFoundException: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     errors.addErrorsItem(new Error()
       .message(exception.getMessage())
       .code(NOT_FOUND_ERROR.getDescription())
@@ -54,7 +54,7 @@ public class DefaultErrorHandler {
   @ExceptionHandler(InternalServerError.class)
   public ResponseEntity<Errors> handleInternalServerError(final InternalServerError exception) {
     log.error("DefaultErrorHandler: InternalServerError: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     errors.addErrorsItem(new Error()
       .message(exception.getMessage())
       .code(INTERNAL_SERVER_ERROR.getDescription())
@@ -65,9 +65,9 @@ public class DefaultErrorHandler {
   }
 
   @ExceptionHandler(UnprocessableEntity.class)
-  public ResponseEntity<Errors> handleUnprocessibleEntityError(final UnprocessableEntity exception) {
+  public ResponseEntity<Errors> handleUnprocessableEntityError(final UnprocessableEntity exception) {
     log.error("DefaultErrorHandler: UnprocessableEntity: " + exception.getMessage());
-    Errors errors = new Errors();
+    var errors = new Errors();
     errors.addErrorsItem(new Error()
       .message(exception.getMessage())
       .type(INTERNAL.getValue()));
