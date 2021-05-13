@@ -186,6 +186,7 @@ class OrdersServiceTest {
     compositePoLine.setVendorDetail(new VendorDetail());
     compositePoLine.setDetails(new Details());
     compositePoLine.setLocations(Collections.singletonList(new Location()));
+    compositePoLine.setOrderFormat(OrderFormat.PHYSICAL_RESOURCE);
 
     when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
     when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
@@ -223,6 +224,8 @@ class OrdersServiceTest {
     compositePoLine.setVendorDetail(new VendorDetail());
     compositePoLine.setDetails(new Details());
     compositePoLine.setLocations(Collections.singletonList(new Location()));
+    compositePoLine.setOrderFormat(OrderFormat.PHYSICAL_RESOURCE);
+
 
     var funds = new FundCollection();
     var fund = new Fund();
