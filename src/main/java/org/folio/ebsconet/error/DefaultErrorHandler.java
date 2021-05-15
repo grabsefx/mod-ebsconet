@@ -1,5 +1,6 @@
 package org.folio.ebsconet.error;
 
+import feign.FeignException.BadRequest;
 import feign.FeignException.InternalServerError;
 import feign.FeignException.UnprocessableEntity;
 import lombok.extern.log4j.Log4j2;
@@ -73,6 +74,18 @@ public class DefaultErrorHandler {
       .type(INTERNAL.getValue()));
     errors.setTotalRecords(1);
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+      .body(errors);
+  }
+
+  @ExceptionHandler(BadRequest.class)
+  public ResponseEntity<Errors> handleBadRequestEntityError(final BadRequest exception) {
+    log.error("DefaultErrorHandler: BadRequest: " + exception.getMessage());
+    var errors = new Errors();
+    errors.addErrorsItem(new Error()
+      .message(exception.getMessage())
+      .type(INTERNAL.getValue()));
+    errors.setTotalRecords(1);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
       .body(errors);
   }
 
