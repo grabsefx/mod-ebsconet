@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import feign.FeignException;
+import feign.FeignException.BadRequest;
 import feign.FeignException.InternalServerError;
 import feign.FeignException.UnprocessableEntity;
 import feign.Request;
@@ -95,6 +95,18 @@ class OrdersControllerTest extends TestBase {
     get(urlWithRandomUuid)
       .then()
       .statusCode(422);
+    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+  }
+
+  @Test
+  void shouldReturnBadRequestIfGetSuchResponse() {
+    String urlWithRandomUuid = poLineUrl + PO_LINE_NUMBER;
+    Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
+    when(ordersService.getEbsconetOrderLine(anyString())).thenThrow(new BadRequest("error", request,"".getBytes()));
+
+    get(urlWithRandomUuid)
+      .then()
+      .statusCode(400);
     verify(ordersService,times(1)).getEbsconetOrderLine(any());
   }
 
