@@ -113,7 +113,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderById(poId)).thenReturn(po);
     when(organizationClient.getOrganizationById(vendorId)).thenReturn(vendorOrg);
 
-    EbsconetOrderLine ebsconetOL = ordersService.getEbsconetOrderLine(poLineNumber);
+    EbsconetOrderLine ebsconetOL = ordersService.getEbscoNetOrderLine(poLineNumber);
 
     verify(ordersClient, times(1)).getOrderLinesByQuery(isA(String.class));
     verify(ordersClient, times(1)).getOrderById(isA(String.class));
@@ -133,7 +133,7 @@ class OrdersServiceTest {
 
     when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
 
-    assertThrows(ResourceNotFoundException.class, () -> ordersService.getEbsconetOrderLine(poLineNumber));
+    assertThrows(ResourceNotFoundException.class, () -> ordersService.getEbscoNetOrderLine(poLineNumber));
   }
 
   @Test
@@ -156,7 +156,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderById(poId)).thenReturn(po);
     when(organizationClient.getOrganizationById(vendorId)).thenReturn(vendorOrg);
 
-    EbsconetOrderLine ebsconetOL = ordersService.getEbsconetOrderLine(poLineNumber);
+    EbsconetOrderLine ebsconetOL = ordersService.getEbscoNetOrderLine(poLineNumber);
 
     assertThat(ebsconetOL.getFundCode(), nullValue());
   }
@@ -191,7 +191,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
     when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
 
-    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+    ordersService.updateEbscoNetOrderLine(ebsconetOrderLine);
 
     verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
     verify(ordersClient, times(1)).getOrderLineById(anyString());
@@ -229,7 +229,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderLinesByQuery("poLineNumber==" + poLineNumber)).thenReturn(polResult);
     when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
 
-    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+    ordersService.updateEbscoNetOrderLine(ebsconetOrderLine);
 
     verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
     verify(ordersClient, times(1)).getOrderLineById(anyString());
@@ -276,7 +276,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderLineById("id")).thenReturn(compositePoLine);
     when(financeClient.getFundsByQuery(any())).thenReturn(funds);
 
-    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+    ordersService.updateEbscoNetOrderLine(ebsconetOrderLine);
 
     verify(ordersClient, times(1)).getOrderLinesByQuery(anyString());
     verify(ordersClient, times(1)).getOrderLineById(anyString());
@@ -292,7 +292,7 @@ class OrdersServiceTest {
     Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
     when(ordersClient.getOrderLinesByQuery(any())).thenThrow(new FeignException.NotFound("", request, "".getBytes()));
     ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,
-      () -> ordersService.updateEbsconetOrderLine(poline));
+      () -> ordersService.updateEbscoNetOrderLine(poline));
     assertThat(resourceNotFoundException.getMessage(),is("PO Line not found: 1"));
   }
 
@@ -306,7 +306,7 @@ class OrdersServiceTest {
     when(ordersClient.getOrderLinesByQuery(any())).thenReturn(lines);
 
     ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,
-      () -> ordersService.updateEbsconetOrderLine(ebsconetOrderLine));
+      () -> ordersService.updateEbscoNetOrderLine(ebsconetOrderLine));
     assertThat(resourceNotFoundException.getMessage(),is("PO Line not found: 1"));
   }
 }

@@ -1,11 +1,22 @@
 package org.folio.ebsconet.mapper;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-import org.folio.ebsconet.domain.dto.*;
-import org.mapstruct.*;
+import org.folio.ebsconet.domain.dto.CompositePoLine;
+import org.folio.ebsconet.domain.dto.Cost;
+import org.folio.ebsconet.domain.dto.EbsconetOrderLine;
+import org.folio.ebsconet.domain.dto.Fund;
+import org.folio.ebsconet.domain.dto.FundDistribution;
+import org.folio.ebsconet.domain.dto.Organization;
+import org.folio.ebsconet.domain.dto.PoLine;
+import org.folio.ebsconet.domain.dto.PurchaseOrder;
+import org.folio.ebsconet.domain.dto.Source;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.NullValueCheckStrategy;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class OrdersMapper {
@@ -48,6 +59,7 @@ public abstract class OrdersMapper {
   }
 
   public void ebsconetToFolio(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine, Fund fund) {
+    poLine.setSource(Source.EBSCONET);
     poLine.setCancellationRestriction(ebsconetOrderLine.getCancellationRestriction());
     poLine.setCancellationRestrictionNote(ebsconetOrderLine.getCancellationRestrictionNote());
     poLine.getCost().setCurrency(ebsconetOrderLine.getCurrency());
@@ -57,24 +69,70 @@ public abstract class OrdersMapper {
     poLine.getVendorDetail().setVendorAccount(ebsconetOrderLine.getVendorAccountNumber());
     poLine.setPublisher(ebsconetOrderLine.getPublisherName());
 
-    if (poLine.getLocations().size() == 1 && !poLine.getOrderFormat().equals(OrderFormat.P_E_MIX)) {
-      if (poLine.getOrderFormat() == OrderFormat.PHYSICAL_RESOURCE) {
-        poLine.getCost().setQuantityPhysical(ebsconetOrderLine.getQuantity());
-        poLine.getCost().setListUnitPrice(ebsconetOrderLine.getUnitPrice());
-        poLine.getLocations().get(0).setQuantityPhysical(ebsconetOrderLine.getQuantity());
-        poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
-      }
-      if (poLine.getOrderFormat() == OrderFormat.ELECTRONIC_RESOURCE) {
-        poLine.getCost().setQuantityElectronic(ebsconetOrderLine.getQuantity());
-        poLine.getCost().setListUnitPriceElectronic(ebsconetOrderLine.getUnitPrice());
-        poLine.getLocations().get(0).setQuantityElectronic(ebsconetOrderLine.getQuantity());
-        poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
-      }
-    }
+    populateCostAndLocations(poLine, ebsconetOrderLine);
 
-    if(fund != null){
+    if (fund != null) {
       poLine.getFundDistribution().get(0).setCode(fund.getCode());
       poLine.getFundDistribution().get(0).setFundId(fund.getId());
     }
+  }
+
+  private void populateCostAndLocations(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    if (poLine.getLocations().size() == 1) {
+      switch (poLine.getOrderFormat()) {
+      case ELECTRONIC_RESOURCE:
+        populateElectronicCostAndLocation(poLine, ebsconetOrderLine);
+        break;
+      case OTHER:
+      case PHYSICAL_RESOURCE:
+        populatePhysicalCostAndLocation(poLine, ebsconetOrderLine);
+        break;
+      case P_E_MIX:
+        populateCostAndLocationPEMix(poLine, ebsconetOrderLine);
+        break;
+      }
+
+    }
+  }
+
+  private void populatePhysicalCostAndLocation(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    poLine.getCost().setQuantityPhysical(ebsconetOrderLine.getQuantity());
+    poLine.getCost().setListUnitPrice(ebsconetOrderLine.getUnitPrice());
+    poLine.getLocations().get(0).setQuantityPhysical(ebsconetOrderLine.getQuantity());
+    poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
+  }
+
+  private void populateElectronicCostAndLocation(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    poLine.getCost().setQuantityElectronic(ebsconetOrderLine.getQuantity());
+    poLine.getCost().setListUnitPriceElectronic(ebsconetOrderLine.getUnitPrice());
+
+    poLine.getLocations().get(0).setQuantityElectronic(ebsconetOrderLine.getQuantity());
+    poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
+  }
+
+  private void populateCostAndLocationPEMix(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    // Price problem
+    // physical = 0 && electronic > 0
+    if (poLine.getCost().getListUnitPrice().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPriceElectronic().signum() > 0) {
+      populateElectronicCostAndLocation(poLine, ebsconetOrderLine);
+    }
+    // physical > 0 && electronic = 0
+    else if (poLine.getCost().getListUnitPriceElectronic().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPrice().signum() > 0) {
+      populatePhysicalCostAndLocation(poLine, ebsconetOrderLine);
+    }
+    else if (poLine.getCost().getListUnitPriceElectronic().signum() > 0 && poLine.getCost().getListUnitPrice().signum() > 0) {
+      // divide unit price
+      BigDecimal newElectronicPrice = ebsconetOrderLine.getUnitPrice().divide(BigDecimal.valueOf(2));
+      BigDecimal newPhysicalPrice = ebsconetOrderLine.getUnitPrice().subtract(newElectronicPrice);
+
+      poLine.getCost().setListUnitPriceElectronic(newElectronicPrice);
+      poLine.getCost().setListUnitPrice(newPhysicalPrice);
+    }
+
+
+
+
+
+    //
   }
 }

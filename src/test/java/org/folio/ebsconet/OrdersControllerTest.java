@@ -44,25 +44,25 @@ class OrdersControllerTest extends TestBase {
     var line = new EbsconetOrderLine();
     line.setPoLineNumber(PO_LINE_NUMBER);
 
-    when(ordersService.getEbsconetOrderLine(any())).thenReturn(line);
+    when(ordersService.getEbscoNetOrderLine(any())).thenReturn(line);
     EbsconetOrderLine ebsconetOrderLine = get(poLineUrl + PO_LINE_NUMBER)
       .then()
       .statusCode(200)
       .extract()
       .as(EbsconetOrderLine.class);
 
-    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+    verify(ordersService,times(1)).getEbscoNetOrderLine(any());
     assertThat(ebsconetOrderLine.getPoLineNumber(),is(PO_LINE_NUMBER));
   }
 
   @Test
   void shouldReturnNotFoundForUnknownPOLNumber() {
     String urlWithRandomUuid = poLineUrl + UNKNOWN_PO_LINE_NUMBER;
-    when(ordersService.getEbsconetOrderLine(anyString())).thenThrow(new ResourceNotFoundException(""));
+    when(ordersService.getEbscoNetOrderLine(anyString())).thenThrow(new ResourceNotFoundException(""));
     get(urlWithRandomUuid)
       .then()
       .statusCode(404);
-    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+    verify(ordersService,times(1)).getEbscoNetOrderLine(any());
   }
 
   @Test
@@ -71,43 +71,43 @@ class OrdersControllerTest extends TestBase {
     get(urlWithInvalidUuid)
       .then()
       .statusCode(400);
-    verify(ordersService,never()).getEbsconetOrderLine(any());
+    verify(ordersService,never()).getEbscoNetOrderLine(any());
   }
 
   @Test
   void shouldReturnInternalErrorForInternalDateParsingIssue() {
     String urlWithRandomUuid = poLineUrl + PO_LINE_NUMBER;
     Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
-    when(ordersService.getEbsconetOrderLine(anyString())).thenThrow(new InternalServerError("error", request,"".getBytes()));
+    when(ordersService.getEbscoNetOrderLine(anyString())).thenThrow(new InternalServerError("error", request,"".getBytes()));
 
     get(urlWithRandomUuid)
       .then()
       .statusCode(500);
-    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+    verify(ordersService,times(1)).getEbscoNetOrderLine(any());
   }
 
   @Test
   void shouldReturnUnprocessableEntityIfGetSuchResponse() {
     String urlWithRandomUuid = poLineUrl + PO_LINE_NUMBER;
     Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
-    when(ordersService.getEbsconetOrderLine(anyString())).thenThrow(new UnprocessableEntity("error", request,"".getBytes()));
+    when(ordersService.getEbscoNetOrderLine(anyString())).thenThrow(new UnprocessableEntity("error", request,"".getBytes()));
 
     get(urlWithRandomUuid)
       .then()
       .statusCode(422);
-    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+    verify(ordersService,times(1)).getEbscoNetOrderLine(any());
   }
 
   @Test
   void shouldReturnBadRequestIfGetSuchResponse() {
     String urlWithRandomUuid = poLineUrl + PO_LINE_NUMBER;
     Request request = Request.create(HttpMethod.GET, "", new HashMap<>(), Body.empty(), new RequestTemplate());
-    when(ordersService.getEbsconetOrderLine(anyString())).thenThrow(new BadRequest("error", request,"".getBytes()));
+    when(ordersService.getEbscoNetOrderLine(anyString())).thenThrow(new BadRequest("error", request,"".getBytes()));
 
     get(urlWithRandomUuid)
       .then()
       .statusCode(400);
-    verify(ordersService,times(1)).getEbsconetOrderLine(any());
+    verify(ordersService,times(1)).getEbscoNetOrderLine(any());
   }
 
   @Test
@@ -120,7 +120,7 @@ class OrdersControllerTest extends TestBase {
     put(urlWithInvalidUuid, ebsconetOrderLine)
       .then()
       .statusCode(400);
-    verify(ordersService,never()).updateEbsconetOrderLine(any());
+    verify(ordersService,never()).updateEbscoNetOrderLine(any());
   }
 
   @Test
@@ -136,6 +136,6 @@ class OrdersControllerTest extends TestBase {
     put(url, ebsconetOrderLine)
       .then()
       .statusCode(204);
-    verify(ordersService,times(1)).updateEbsconetOrderLine(any());
+    verify(ordersService,times(1)).updateEbscoNetOrderLine(any());
   }
 }

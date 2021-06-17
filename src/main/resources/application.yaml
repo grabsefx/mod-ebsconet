@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: mod-ebsconet
+
   liquibase:
     enabled: false
   autoconfigure:
@@ -20,4 +21,13 @@ feign:
       change-manager:
         logger-level: full
 
+management:
+  endpoints:
+    web:
+      base-path: "/admin"
 
+header:
+  validation:
+    x-okapi-tenant:
+      exclude:
+        base-paths: "/admin"
