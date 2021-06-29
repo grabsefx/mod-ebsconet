@@ -15,6 +15,8 @@ import org.mapstruct.Named;
 import org.mapstruct.NullValueCheckStrategy;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,15 +93,14 @@ public abstract class OrdersMapper {
         populateCostAndLocationPEMix(poLine, ebsconetOrderLine);
         break;
       }
-
     }
   }
 
   private void populatePhysicalCostAndLocation(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
     poLine.getCost().setQuantityPhysical(ebsconetOrderLine.getQuantity());
     poLine.getCost().setListUnitPrice(ebsconetOrderLine.getUnitPrice());
+
     poLine.getLocations().get(0).setQuantityPhysical(ebsconetOrderLine.getQuantity());
-    poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
   }
 
   private void populateElectronicCostAndLocation(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
@@ -107,32 +108,65 @@ public abstract class OrdersMapper {
     poLine.getCost().setListUnitPriceElectronic(ebsconetOrderLine.getUnitPrice());
 
     poLine.getLocations().get(0).setQuantityElectronic(ebsconetOrderLine.getQuantity());
-    poLine.getLocations().get(0).setQuantity(ebsconetOrderLine.getQuantity());
   }
 
   private void populateCostAndLocationPEMix(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
-    // Price problem
-    // physical = 0 && electronic > 0
+    processPEmixPriceUpdate(poLine, ebsconetOrderLine);
+    processPEMixQuantityUpdate(poLine, ebsconetOrderLine);
+  }
+
+  private void processPEMixQuantityUpdate(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    // Q physical = 1 and electronic > 1
+    if (poLine.getCost().getQuantityPhysical() == 1 && poLine.getCost().getQuantityElectronic() > 1) {
+      poLine.getCost().setQuantityElectronic(ebsconetOrderLine.getQuantity() - 1);
+      poLine.getLocations().get(0).setQuantityElectronic(ebsconetOrderLine.getQuantity() - 1);
+      poLine.getCost().setQuantityPhysical(1);
+      poLine.getLocations().get(0).setQuantityPhysical(1);
+    }
+
+    // Q physical > 1, Q electronic = 1
+    else if (poLine.getCost().getQuantityPhysical() > 1 && poLine.getCost().getQuantityElectronic() == 1) {
+      poLine.getCost().setQuantityPhysical(ebsconetOrderLine.getQuantity() - 1);
+      poLine.getLocations().get(0).setQuantityPhysical(ebsconetOrderLine.getQuantity() - 1);
+      poLine.getCost().setQuantityElectronic(1);
+      poLine.getLocations().get(0).setQuantityElectronic(1);
+    }
+
+    // Q (physical > 1 and Q electronic > 1)  OR  (physical = 1 and electronic = 1)
+    else if ((poLine.getCost().getQuantityElectronic() > 1 && poLine.getCost().getQuantityPhysical() > 1)
+      || (poLine.getCost().getQuantityElectronic() == 1 && poLine.getCost().getQuantityPhysical() == 1)) {
+      int newElectronicQuantity = ebsconetOrderLine.getQuantity() / 2;
+      int newPhysicalQuantity = ebsconetOrderLine.getQuantity() - newElectronicQuantity;
+
+      poLine.getCost().setQuantityElectronic(newElectronicQuantity);
+      poLine.getCost().setQuantityPhysical(newPhysicalQuantity);
+      poLine.getLocations().get(0).setQuantityElectronic(newElectronicQuantity);
+      poLine.getLocations().get(0).setQuantityPhysical(newPhysicalQuantity);
+    }
+  }
+
+  private void processPEmixPriceUpdate(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
+    // Price physical = 0 and electronic > 0
+    var fractionDigits = Currency.getInstance(ebsconetOrderLine.getCurrency()).getDefaultFractionDigits();
+    var unitPrice = ebsconetOrderLine.getUnitPrice().setScale(fractionDigits, RoundingMode.HALF_EVEN);
+
     if (poLine.getCost().getListUnitPrice().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPriceElectronic().signum() > 0) {
-      populateElectronicCostAndLocation(poLine, ebsconetOrderLine);
+      poLine.getCost().setListUnitPriceElectronic(unitPrice);
     }
-    // physical > 0 && electronic = 0
+
+    // Price physical > 0, electronic = 0
     else if (poLine.getCost().getListUnitPriceElectronic().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPrice().signum() > 0) {
-      populatePhysicalCostAndLocation(poLine, ebsconetOrderLine);
+      poLine.getCost().setListUnitPrice(unitPrice);
     }
+    // Price physical > 0, electronic > 0
     else if (poLine.getCost().getListUnitPriceElectronic().signum() > 0 && poLine.getCost().getListUnitPrice().signum() > 0) {
       // divide unit price
-      BigDecimal newElectronicPrice = ebsconetOrderLine.getUnitPrice().divide(BigDecimal.valueOf(2));
-      BigDecimal newPhysicalPrice = ebsconetOrderLine.getUnitPrice().subtract(newElectronicPrice);
+
+      BigDecimal newElectronicPrice = unitPrice.divide(BigDecimal.valueOf(2), fractionDigits, RoundingMode.HALF_EVEN).setScale(fractionDigits, RoundingMode.HALF_EVEN);
+      BigDecimal newPhysicalPrice = unitPrice.subtract(newElectronicPrice).setScale(fractionDigits, RoundingMode.HALF_EVEN);;
 
       poLine.getCost().setListUnitPriceElectronic(newElectronicPrice);
       poLine.getCost().setListUnitPrice(newPhysicalPrice);
     }
-
-
-
-
-
-    //
   }
 }
