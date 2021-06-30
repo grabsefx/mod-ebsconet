@@ -80,19 +80,17 @@ public abstract class OrdersMapper {
   }
 
   private void populateCostAndLocations(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
-    if (poLine.getLocations().size() == 1) {
-      switch (poLine.getOrderFormat()) {
-      case ELECTRONIC_RESOURCE:
-        populateElectronicCostAndLocation(poLine, ebsconetOrderLine);
-        break;
-      case OTHER:
-      case PHYSICAL_RESOURCE:
-        populatePhysicalCostAndLocation(poLine, ebsconetOrderLine);
-        break;
-      case P_E_MIX:
-        populateCostAndLocationPEMix(poLine, ebsconetOrderLine);
-        break;
-      }
+    switch (poLine.getOrderFormat()) {
+    case ELECTRONIC_RESOURCE:
+      populateElectronicCostAndLocation(poLine, ebsconetOrderLine);
+      break;
+    case OTHER:
+    case PHYSICAL_RESOURCE:
+      populatePhysicalCostAndLocation(poLine, ebsconetOrderLine);
+      break;
+    case P_E_MIX:
+      populateCostAndLocationPEMix(poLine, ebsconetOrderLine);
+      break;
     }
   }
 
