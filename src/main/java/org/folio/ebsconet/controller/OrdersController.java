@@ -30,6 +30,6 @@ public class OrdersController implements OrdersApi {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     ordersService.updateEbscoNetOrderLine(ebsconetOrderLine);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    return ResponseEntity.noContent().build();
   }
 }
