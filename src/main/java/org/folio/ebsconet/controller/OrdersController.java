@@ -20,7 +20,7 @@ public class OrdersController implements OrdersApi {
 
   @Override
   public ResponseEntity<EbsconetOrderLine> getEbsconetOrderLine(String poLineNumber) {
-    EbsconetOrderLine orderLine = ordersService.getEbsconetOrderLine(poLineNumber);
+    var orderLine = ordersService.getEbscoNetOrderLine(poLineNumber);
     return new ResponseEntity<>(orderLine, HttpStatus.OK);
   }
 
@@ -29,7 +29,7 @@ public class OrdersController implements OrdersApi {
     if (!ebsconetOrderLine.getPoLineNumber().equals(poLineNumber)) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    ordersService.updateEbsconetOrderLine(ebsconetOrderLine);
+    ordersService.updateEbscoNetOrderLine(ebsconetOrderLine);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

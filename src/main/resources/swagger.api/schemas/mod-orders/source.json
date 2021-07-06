@@ -3,9 +3,10 @@
   "description": "The source of the Order",
   "type": "string",
   "enum": [
-     "User",
-     "API",
-     "EDI",
-     "MARC"
-   ]
+    "User",
+    "API",
+    "EDI",
+    "MARC",
+    "EBSCONET"
+  ]
 }

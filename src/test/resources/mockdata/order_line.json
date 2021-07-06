@@ -1,0 +1,28 @@
+{
+  "cost": {
+    "quantityPhysical": 1,
+    "listUnitPrice": 1,
+    "currency": "USD"
+  },
+  "purchaseOrderId": "d79b0bcc-DcAD-1E4E-Abb7-DbFcaD5BB3bb",
+  "vendorDetail": {
+    "vendorAccount": "1234-56",
+    "referenceNumbers": [
+      {
+        "refNumber": "123456-78",
+        "refNumberType": "Vendor title number"
+      }
+    ]
+  },
+  "publisher": "MIT Press",
+  "poLineNumber": "268758-03",
+  "id": "c0d08448-347b-418a-8c2f-5fb50248d67e",
+  "cancellationRestriction": false,
+  "cancellationRestrictionNote": "Cancellation Restriction Note",
+  "fundDistribution": [
+    {
+      "code": "HIST",
+      "distributionType": "percentage"
+    }
+  ]
+}
