@@ -144,16 +144,16 @@ public abstract class OrdersMapper {
   }
 
   private void processPEmixPriceUpdate(CompositePoLine poLine, EbsconetOrderLine ebsconetOrderLine) {
-    // Price physical = 0 and electronic > 0
     var fractionDigits = Currency.getInstance(ebsconetOrderLine.getCurrency()).getDefaultFractionDigits();
     var unitPrice = ebsconetOrderLine.getUnitPrice().setScale(fractionDigits, RoundingMode.HALF_EVEN);
 
-    if (poLine.getCost().getListUnitPrice().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPriceElectronic().signum() > 0) {
+    // Price physical = 0 and electronic > 0
+    if (poLine.getCost().getListUnitPrice().signum() == 0 && poLine.getCost().getListUnitPriceElectronic().signum() > 0) {
       poLine.getCost().setListUnitPriceElectronic(unitPrice);
     }
 
     // Price physical > 0, electronic = 0
-    else if (poLine.getCost().getListUnitPriceElectronic().equals(BigDecimal.ZERO) && poLine.getCost().getListUnitPrice().signum() > 0) {
+    else if (poLine.getCost().getListUnitPriceElectronic().signum() == 0 && poLine.getCost().getListUnitPrice().signum() > 0) {
       poLine.getCost().setListUnitPrice(unitPrice);
     }
     // Price physical > 0, electronic > 0
