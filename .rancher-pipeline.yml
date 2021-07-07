@@ -15,7 +15,7 @@ stages:
 - name: Deploy
   steps:
   - applyAppConfig:
-      catalogTemplate: p-n6zpg:thunderjet-helmcharts-mod-orders
+      catalogTemplate: p-n6zpg:thunderjet-helmcharts-mod-ebsconet (Custom)
       version: 0.1.32
       answers:
         image.repository: docker.dev.folio.org/mod-ebsconet
