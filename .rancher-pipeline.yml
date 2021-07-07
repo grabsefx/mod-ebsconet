@@ -16,7 +16,7 @@ stages:
   steps:
   - applyAppConfig:
       catalogTemplate: p-n6zpg:thunderjet-helmcharts-mod-ebsconet (Custom)
-      version: 0.1.32
+      version: 0.1.1
       answers:
         image.repository: docker.dev.folio.org/mod-ebsconet
         image.tag: 1.1.0-SNAPSHOT.11
