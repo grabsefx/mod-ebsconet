@@ -45,8 +45,8 @@ public class OrdersService {
     var vendor = organizationClient.getOrganizationById(vendorId);
     log.debug("Vendor organization received for getEbsconetOrderLine poLineNumber={}", poLineNumber);
     EbsconetOrderLine eol = ordersMapper.folioToEbsconet(order, line, vendor);
-    log.info("success for getEbsconetOrderLine poLineNumber={}", poLineNumber);
-    log.debug(eol);
+    log.info("success for getEbsconetOrderLine", eol);
+
     return eol;
   }
 
